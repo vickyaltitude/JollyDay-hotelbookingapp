@@ -4,13 +4,13 @@ import { NavLink } from 'react-router-dom';
 
 const MyNavbar = () => {
   return (
-    <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm px-5 py-2 fixed-top " >
+    <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm px-5 py-2 fixed-top" >
       <Navbar.Brand as={NavLink} to="/" style={{ fontSize: '2rem', 
       fontWeight: 'bold',}} className="font-weight-bold" >
         JollyDay Admin
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-between">
+      <Navbar.Collapse id="basic-navbar-nav" >
         <Nav className="mr-auto">
           <Nav.Link as={NavLink} to="/" exact className="nav-link px-3">
             Home
@@ -34,7 +34,7 @@ const MyNavbar = () => {
           </NavDropdown>
         </Nav>
 
-        <Nav className="ml-auto">
+        <Nav className="ms-auto">
           <Nav.Link as={NavLink} to="/login" className="nav-link px-3">
             Login
           </Nav.Link>

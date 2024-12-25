@@ -1,22 +1,20 @@
 {
-  "name": "adminportal",
+  "name": "userportal",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
     "bootstrap": "^5.3.3",
     "cra-template": "1.2.0",
-    "cross-env": "^7.0.3",
     "react": "^18.3.0",
     "react-bootstrap": "^2.10.7",
     "react-dom": "^18.3.0",
     "react-icons": "^5.4.0",
-    "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "cross-env PORT=3001 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
