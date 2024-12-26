@@ -1,23 +1,60 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 import Background from '../UI/Background'; 
+import ApiHandler from '../../ApiHandler';
+import { useNavigate } from 'react-router-dom';
+import { adminReducerActions } from '../../store/adminReducer';
+import { useDispatch } from 'react-redux';
 
 const LoginPage = () => {
   const [platformId, setPlatformId] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const [isLoading,setIsLoading] = useState(null);
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
-    
-  
-    if (platformId === 'admin' && password === 'password123') {
-      setIsLoggedIn(true);
-      setErrorMessage('');
-    } else {
-      setErrorMessage('Invalid Platform ID or Password');
+    if(password.length < 6){
+      setErrorMessage('Password length should not be less than 6')
+    }else{
+      setIsLoading(true)
+       setErrorMessage('')
+       const sendDataObj = {
+        method: 'POST',
+        headers:{
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({platformId,password})
+       }
+       ApiHandler('http://localhost:8000/admin/checklogin',sendDataObj).then(resp =>{
+         
+        setIsLoading(false)
+          if(resp.msg === "User login successfull"){
+        
+            setErrorMessage('')
+            localStorage.setItem('adminAuthToken',resp.adminAuthToken)
+            localStorage.setItem('adminDetails',JSON.stringify(resp.userDetails))
+            dispatch(adminReducerActions.setAdminAuthToken(resp.adminAuthToken))
+            dispatch(adminReducerActions.setAdminDetails(resp.userDetails))
+            navigate('/admin/home')
+
+          }else{
+
+            console.log(resp)
+            setErrorMessage(resp.message)
+
+          }
+
+       }).catch(err =>{
+
+           console.log(err)
+
+       })
     }
+     
   };
 
   return (
@@ -62,7 +99,10 @@ const LoginPage = () => {
                       Forgot Password?
                     </Button>
                     <Button variant="primary" type="submit" block className="mt-3">
-                      Login
+
+                      {isLoading && 'Logging in ...'}
+                      {!isLoading && 'Login'}
+                     
                     </Button>
                   </div>
                 </Form>

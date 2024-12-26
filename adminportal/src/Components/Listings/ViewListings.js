@@ -1,8 +1,14 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Container, Row, Col, Card, Button, Carousel } from 'react-bootstrap';
 import Background from '../UI/Background';
+import {useNavigate} from 'react-router-dom';
+import { useSelector} from 'react-redux';
 
 const ViewListings = () => {
+
+  const navigate = useNavigate();
+  const adminToken = useSelector(state => state.admin.adminAuthToken);
+
   const listings = [
     {
       id: 1,
@@ -49,6 +55,14 @@ const ViewListings = () => {
     }
   ];
 
+  useEffect(() => {
+
+    if (!adminToken) {
+      navigate('/admin/login');
+    }
+  }, [navigate,adminToken]);
+
+ 
   return (
     <Background>
       <Container className="text-white py-5" style={{ flex: 1 }}>

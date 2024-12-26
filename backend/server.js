@@ -7,12 +7,13 @@ const path = require("path");
 
 
 const dbConnect = require('./utils/dbconnections');
+const newAdmin = require('./routes/adminAuth');
 
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true
 }))
@@ -27,6 +28,8 @@ app.get('/client/home',(req,res)=>{
 app.get('/admin/home',(req,res)=>{
     res.sendFile(path.join(__dirname, "../" , "adminportal/build", "index.html"));
 })
+
+app.use(newAdmin);
 
 dbConnect().then(resp =>{
 

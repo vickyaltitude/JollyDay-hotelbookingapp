@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import Background from '../UI/Background';
+import ApiHandler from '../../ApiHandler';
+import {useNavigate} from 'react-router-dom';
 
 const SignupPage = () => {
 
+    const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
     platformId: '',
-    username: '',
+    userName: '',
+    userEmail:'',
     userContact: '',
-    email: '',
-    address: '',
-    businessLocation: '',
+    businessAddress: '',
+        ownerName: '',
+            yearsInBusiness: '',
     ownerContact: '',
-    yearsInBusiness: '',
-    ownerName: ''
+    password: '',
+    confirmPassword:''
+
   });
+
 
   
   const handleChange = (e) => {
@@ -28,7 +35,61 @@ const SignupPage = () => {
  
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted with data:', formData);
+    if(formData.password !== formData.confirmPassword){
+        alert("Password & Confirm Password should be same")
+        return
+    }else if( formData.password.length < 6){
+        alert("Password length should be minimum 6")
+        return
+    }
+  
+
+    const { confirmPassword, ...newUserObject } = formData;
+
+    const sendApiData = {
+        method: 'POST',
+        headers:{
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(newUserObject)
+    }
+
+   ApiHandler('http://localhost:8000/admin/newadmin',sendApiData).then(resp =>{
+
+        console.log(resp)
+        if(resp.message === 'User already exist'){
+
+            alert('User already exist! please login')
+
+        }else if(resp.message === 'User creation success'){
+ 
+         setFormData({
+             platformId: '',
+             userName: '',
+             userEmail:'',
+             userContact: '',
+             businessAddress: '',
+                 ownerName: '',
+                     yearsInBusiness: '',
+             ownerContact: '',
+             password: '',
+             confirmPassword:''
+         
+           })
+            alert('User successfully created! Redirecting to login page')
+           
+             setTimeout(()=>{
+                  navigate('/admin/login')
+             })
+ 
+        }else if(resp.message === 'Something went wrong with our database... please try again'){
+         alert('Something went wrong on our side.. please try again or reload the app')
+        }
+
+    }).catch(err =>{
+        console.log(err)
+    });
+   
    
   };
 
@@ -66,7 +127,7 @@ const SignupPage = () => {
                     <Form.Label>Username</Form.Label>
                     <Form.Control
                       type="text"
-                      name="username"
+                      name="userName"
                       value={formData.username}
                       onChange={handleChange}
                       placeholder="Enter Username"
@@ -90,7 +151,7 @@ const SignupPage = () => {
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                       type="email"
-                      name="email"
+                      name="userEmail"
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="Enter Email Address"
@@ -99,25 +160,13 @@ const SignupPage = () => {
                   </Form.Group>
 
                   <Form.Group controlId="formAddress">
-                    <Form.Label>Communication Address</Form.Label>
+                    <Form.Label>Business Address</Form.Label>
                     <Form.Control
                       type="text"
-                      name="address"
+                      name="businessAddress"
                       value={formData.address}
                       onChange={handleChange}
                       placeholder="Enter Communication Address"
-                      required
-                    />
-                  </Form.Group>
-
-                  <Form.Group controlId="formBusinessLocation">
-                    <Form.Label>Business Property Location</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="businessLocation"
-                      value={formData.businessLocation}
-                      onChange={handleChange}
-                      placeholder="Enter Business Property Location"
                       required
                     />
                   </Form.Group>
@@ -154,6 +203,30 @@ const SignupPage = () => {
                       value={formData.ownerName}
                       onChange={handleChange}
                       placeholder="Enter Owner Name"
+                      required
+                    />
+                  </Form.Group>
+
+                  <Form.Group controlId="formPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="create password"
+                      required
+                    />
+                  </Form.Group>
+
+                  <Form.Group controlId="formConfirmPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Re-enter the password"
                       required
                     />
                   </Form.Group>

@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import Background from '../UI/Background';
+import { useNavigate } from 'react-router-dom';
+
+import { useSelector} from 'react-redux';
 
 const CreateListing = () => {
 
   const [step, setStep] = useState(1);
-
+  const navigate = useNavigate();
+ 
+  const adminToken = useSelector(state => state.admin.adminAuthToken);
 
   const [formData, setFormData] = useState({
     propertyName: '',
@@ -48,6 +53,13 @@ const CreateListing = () => {
       setStep(step - 1);
     }
   };
+
+  useEffect(() => {
+    if (!adminToken) {
+      navigate('/admin/login');
+    }
+  }, [navigate,adminToken]);
+
 
   return (
     <Background>

@@ -11,10 +11,24 @@ import LoginPage from "./Components/Authentication/Login";
 import JoinUsPage from "./Components/Authentication/JoinUsPage";
 import MissingPage from "./Components/MissingPage/MissingPage";
 import SignupPage from "./Components/Authentication/SignupPage";
-
+import { adminReducerActions } from "./store/adminReducer";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 
 function App() {
+
+  const dispatch = useDispatch();
+
+
+ useEffect(()=>{
+   
+  dispatch(adminReducerActions.setAdminAuthToken(localStorage.getItem('adminAuthToken')))
+  
+  
+ },[dispatch])
+
+
   return (
     <div>
        <MyNavbar />
