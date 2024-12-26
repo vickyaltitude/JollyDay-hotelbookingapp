@@ -16,13 +16,13 @@ function App() {
     <div>
        <NavigationBar />
        <Routes>
-        <Route path='/' element={<HomePage /> } />
-        <Route path='/explore' element={<ExplorePage /> } />
-        <Route path='/booking-summary' element={<BookingSummary /> } />
-        <Route path='/my-bookings' element={<MyBookingsPage /> } />
-        <Route path='/aboutus' element={<AboutUsPage /> } />
-        <Route path="/signup" element={<Signup /> } />
-        <Route path='/login' element={<Login /> } />
+        <Route path='/client/home' element={<HomePage /> } />
+        <Route path='/client/explore' element={<ExplorePage /> } />
+        <Route path='/client/booking-summary' element={<BookingSummary /> } />
+        <Route path='/client/my-bookings' element={<MyBookingsPage /> } />
+        <Route path='/client/aboutus' element={<AboutUsPage /> } />
+        <Route path="/client/signup" element={<Signup /> } />
+        <Route path='/client/login' element={<Login /> } />
        </Routes>
        <Footer />
     </div>

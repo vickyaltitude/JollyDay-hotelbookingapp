@@ -10,6 +10,7 @@ import BookingHistory from "./Components/History/BookingHistory";
 import LoginPage from "./Components/Authentication/Login";
 import JoinUsPage from "./Components/Authentication/JoinUsPage";
 import MissingPage from "./Components/MissingPage/MissingPage";
+import SignupPage from "./Components/Authentication/SignupPage";
 
 
 
@@ -19,14 +20,15 @@ function App() {
        <MyNavbar />
      
        <Routes>
-        <Route path='/' element={  <HomePage />} />
-        <Route path='/create-listing' element={<CreateListing /> } />
-        <Route path='/view-listings' element={<ViewListings /> } />
-        <Route path='/manage-bookings' element={<ManageBookings /> } />
-        <Route path='/profile' element={<AdminProfile /> } />
-        <Route path='/booking-history' element={<BookingHistory /> } />
-        <Route path='/login' element={<LoginPage /> } />
-        <Route path='/joinus' element={<JoinUsPage /> } />
+        <Route path='/admin/home' element={  <HomePage />} />
+        <Route path='/admin/create-listing' element={<CreateListing /> } />
+        <Route path='/admin/view-listings' element={<ViewListings /> } />
+        <Route path='/admin/manage-bookings' element={<ManageBookings /> } />
+        <Route path='/admin/profile' element={<AdminProfile /> } />
+        <Route path='/admin/booking-history' element={<BookingHistory /> } />
+        <Route path='/admin/login' element={<LoginPage /> } />
+        <Route path='/admin/joinus' element={<JoinUsPage /> } />
+        <Route path='/admin/signup' element={<SignupPage /> } />
         <Route path="*" element={<MissingPage /> }/>
        </Routes>
        <Footer />

@@ -22,7 +22,7 @@ const NavigationBar = () => {
       <Container>
         <Navbar.Brand
           as={NavLink}
-          to="/"
+          to="/client/home"
           style={{
             fontSize: '2rem',
             fontWeight: 'bold',
@@ -39,7 +39,7 @@ const NavigationBar = () => {
           <Nav className="mr-auto">
             <Nav.Link
               as={NavLink}
-              to="/"
+              to="/client/home"
               className="nav-link px-4"
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
@@ -52,7 +52,7 @@ const NavigationBar = () => {
             >
               <NavDropdown.Item
                 as={Link}
-                to="/explore"
+                to="/client/explore"
                 eventKey="Hotels"
                 style={{ listStyleType: 'none' }}
               >
@@ -60,7 +60,7 @@ const NavigationBar = () => {
               </NavDropdown.Item>
               <NavDropdown.Item
                 as={Link}
-                to="/explore"
+                to="/client/explore"
                 eventKey="Apartments"
                 style={{ listStyleType: 'none' }}
               >
@@ -68,7 +68,7 @@ const NavigationBar = () => {
               </NavDropdown.Item>
               <NavDropdown.Item
                 as={Link}
-                to="/explore"
+                to="/client/explore"
                 eventKey="Boathouse"
                 style={{ listStyleType: 'none' }}
               >
@@ -76,7 +76,7 @@ const NavigationBar = () => {
               </NavDropdown.Item>
               <NavDropdown.Item
                 as={Link}
-                to="/explore"
+                to="/client/explore"
                 eventKey="Villas"
                 style={{ listStyleType: 'none' }}
               >
@@ -85,7 +85,7 @@ const NavigationBar = () => {
             </NavDropdown>
             <Nav.Link
               as={NavLink}
-              to="/booking-summary"
+              to="/client/booking-summary"
               className="nav-link px-3"
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
@@ -93,7 +93,7 @@ const NavigationBar = () => {
             </Nav.Link>
             <Nav.Link
               as={NavLink}
-              to="/my-bookings"
+              to="/client/my-bookings"
              className="nav-link px-3"
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
@@ -101,7 +101,7 @@ const NavigationBar = () => {
             </Nav.Link>
             <Nav.Link
               as={NavLink}
-              to="/aboutus"
+              to="/client/aboutus"
               className="nav-link px-3"
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
@@ -112,7 +112,7 @@ const NavigationBar = () => {
           <Nav className='ms-auto' >
             <Nav.Link
               as={NavLink}
-              to="http://localhost:3001/joinus"
+              to="/client/signup"
               className="nav-link px-3"
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
@@ -120,7 +120,7 @@ const NavigationBar = () => {
             </Nav.Link>
             <Nav.Link
               as={NavLink}
-              to="/login"
+              to="/client/login"
              className="nav-link px-3"
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
@@ -128,7 +128,7 @@ const NavigationBar = () => {
             </Nav.Link>
             <Nav.Link
               as={NavLink}
-              to="/signup"
+              to="/client/signup"
               className="nav-link px-3"
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
