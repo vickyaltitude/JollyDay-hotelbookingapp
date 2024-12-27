@@ -8,6 +8,7 @@ const path = require("path");
 
 const dbConnect = require('./utils/dbconnections');
 const newAdmin = require('./routes/adminAuth');
+const property = require('./routes/propertyRoute');
 
 
 app.use(bodyParser.urlencoded({extended:true}));
@@ -30,6 +31,8 @@ app.get('/admin/home',(req,res)=>{
 })
 
 app.use(newAdmin);
+
+app.use(property);
 
 dbConnect().then(resp =>{
 

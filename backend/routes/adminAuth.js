@@ -69,7 +69,7 @@ router.post('/admin/checklogin', async (req,res)=>{
          return res.json({ message: 'Invalid password' });
        }
    
-      const { password, ...adminWithoutPassword } = admin;
+   
       console.log(admin)
     
        const userDetails = {
@@ -80,7 +80,8 @@ router.post('/admin/checklogin', async (req,res)=>{
          ownerName: admin.ownerName,
          platformId: admin.platformId,
          yearsInBusiness: admin.yearsInBusiness,
-         ownerContact: admin.ownerContact
+         ownerContact: admin.ownerContact,
+         profilePic: admin.profilePic
        }
 
        res.json({msg: 'User login successfull',adminAuthToken: generatedToken.encryptuserid(admin._id.toString(),admin.userName,admin.userEmail),userDetails})
@@ -93,7 +94,7 @@ router.post('/admin/checklogin', async (req,res)=>{
 
 router.post('/admin/updateadminprofile',upload.single('profilePic'),(req,res)=>{
 
-    try {
+ 
         const file = req.file;
     
         if (!file) {
@@ -155,10 +156,7 @@ router.post('/admin/updateadminprofile',upload.single('profilePic'),(req,res)=>{
     
     
        
-      } catch (error) {
-        console.error('Error uploading image to S3:', error);
-        res.status(500).json({ message: 'Error uploading image to S3' });
-      }
+   
 
 })
 

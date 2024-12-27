@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const propertyInitialState = {
-    properties:[]
+    properties:[],
+    propertyLoading: true
 }
 
 const propertyReducer = createSlice({
@@ -10,6 +11,9 @@ const propertyReducer = createSlice({
     reducers:{
         setProperties(state,action){
             state.properties = action.payload
+        },
+        setPropertyLoad(state){
+            state.propertyLoading = false
         }
     }
 })

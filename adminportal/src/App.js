@@ -12,8 +12,11 @@ import JoinUsPage from "./Components/Authentication/JoinUsPage";
 import MissingPage from "./Components/MissingPage/MissingPage";
 import SignupPage from "./Components/Authentication/SignupPage";
 import { adminReducerActions } from "./store/adminReducer";
+import { propertyReducerActions } from "./store/propertyReducer";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import PropertyDetails from "./Components/Listings/PropertyDetails";
+import ApiHandler from "./ApiHandler";
 
 
 function App() {
@@ -24,9 +27,35 @@ function App() {
  useEffect(()=>{
    
   dispatch(adminReducerActions.setAdminAuthToken(localStorage.getItem('adminAuthToken')))
+  dispatch(adminReducerActions.setAdminDetails(JSON.parse(localStorage.getItem('adminDetails'))))
   
-  
+
  },[dispatch])
+
+ useEffect(()=>{
+
+  const optionsObj = {
+    method: 'GET',
+    headers:{
+      'Content-Type' : 'application/json',
+      'Authorization' : localStorage.getItem('adminAuthToken')
+    }
+  }
+    
+    ApiHandler('http://localhost:8000/admin/getproperties',optionsObj).then(resp=>{
+      
+      console.log(resp.properties)
+      dispatch(propertyReducerActions.setProperties(resp.properties))
+      dispatch(propertyReducerActions.setPropertyLoad())
+
+    }).catch(err =>{
+
+        console.log(err)
+
+    })
+   
+
+ },[])
 
 
   return (
@@ -43,6 +72,7 @@ function App() {
         <Route path='/admin/login' element={<LoginPage /> } />
         <Route path='/admin/joinus' element={<JoinUsPage /> } />
         <Route path='/admin/signup' element={<SignupPage /> } />
+        <Route path='/admin/propertydetails/:id' element={<PropertyDetails /> }/>
         <Route path="*" element={<MissingPage /> }/>
        </Routes>
        <Footer />
