@@ -48,9 +48,9 @@ const ViewListings = () => {
   return (
     <Background>
       <Container className="text-white py-5" style={{ flex: 1 }}>
-        <h1 className="text-center mb-5" style={{ color: 'whitesmoke', fontWeight: 'bolder' }}>My Property Listings</h1>
+        <h1 className="text-center mb-5" style={{ color: 'whitesmoke', fontWeight: 'bolder' }}>Property Listings</h1>
         <Row>
-          {properties.map((listing) => (
+       {properties.length > 0 && properties.map((listing) => (
             <Col md={4} key={listing._id} className="mb-4">
               <Card className="text-white" style={{ border: 'none' }}>
           
@@ -104,7 +104,10 @@ const ViewListings = () => {
 
               </Card>
             </Col>
-          ))}
+          )) }
+
+         
+          
         </Row>
       </Container>
     </Background>

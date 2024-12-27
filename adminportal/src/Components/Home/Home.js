@@ -4,6 +4,8 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 
 const HomePage = () => {
+
+
     return (
         <>
           <div className="banner" 
@@ -69,42 +71,8 @@ const HomePage = () => {
                 <div className="text-center">
                     <NavLink to="/" className="btn btn-primary btn-lg">Join Us & List Your Properties Now</NavLink>
                 </div>
-                <h3 className="text-center text-white mt-5">Featured Properties</h3>
-                <Row>
-               
-                    <Col md={4}>
-                        <Card className="mb-4" style={{ backgroundColor: '#1e1e1e', border: '1px solid #333' }}>
-                            <Card.Img variant="top" src="https://via.placeholder.com/350x200" alt="Property 1" />
-                            <Card.Body>
-                                <Card.Title className="text-white">Luxury Villa</Card.Title>
-                                <Card.Text className="text-white">A beautiful luxury villa with stunning views, perfect for family vacations.</Card.Text>
-                                <NavLink to="/" className="btn btn-primary">View Details</NavLink>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-          
-                    <Col md={4}>
-                        <Card className="mb-4" style={{ backgroundColor: '#1e1e1e', border: '1px solid #333' }}>
-                            <Card.Img variant="top" src="https://via.placeholder.com/350x200" alt="Property 2" />
-                            <Card.Body>
-                                <Card.Title className="text-white">Cozy Apartment</Card.Title>
-                                <Card.Text className="text-white">A cozy apartment in the heart of the city, ideal for business travelers.</Card.Text>
-                                <NavLink to="/" className="btn btn-primary">View Details</NavLink>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-              
-                    <Col md={4}>
-                        <Card className="mb-4" style={{ backgroundColor: '#1e1e1e', border: '1px solid #333' }}>
-                            <Card.Img variant="top" src="https://via.placeholder.com/350x200" alt="Property 3" />
-                            <Card.Body>
-                                <Card.Title className="text-white">Charming Boathouse</Card.Title>
-                                <Card.Text className="text-white">A charming boathouse perfect for a weekend getaway, surrounded by nature.</Card.Text>
-                                <NavLink to="/" className="btn btn-primary">View Details</NavLink>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+         
+             
             </Container>
 
         </>

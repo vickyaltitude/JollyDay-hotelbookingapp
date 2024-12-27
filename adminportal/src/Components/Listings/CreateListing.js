@@ -4,13 +4,16 @@ import Background from '../UI/Background';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { propertyReducerActions } from '../../store/propertyReducer';
 
 const CreateListing = () => {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
+  const dipatch = useDispatch()
   const [isTokenChecked, setIsTokenChecked] = useState(false);
   const adminToken = useSelector(state => state.admin.adminAuthToken);
+  const properties = useSelector(state => state.property.properties)
   const [isLoading,setIsLoading] = useState(false)
   const [dataMsg,setDataMsg] = useState(null)
 
@@ -172,6 +175,8 @@ const CreateListing = () => {
 
      
        console.log('property uploaded successfully',resp)
+       let newProperties = [...properties,resp.storedNewProperty]
+       dipatch(propertyReducerActions.setProperties(newProperties))
        setIsLoading(false)
        setDataMsg(resp.message)
        setFormData({
@@ -188,13 +193,14 @@ const CreateListing = () => {
         localIdAllowed: '',
         petsAllowed: '',
       })
+      navigate('/admin/view-listings')
 
     }).catch(err =>{
 
          
          console.log(err)
          setIsLoading(false)
-         setDataMsg(`${err.message}Please try again or refresh the app`)
+         setDataMsg(`Something went wrong Please try again or refresh the app`)
 
 
     })
