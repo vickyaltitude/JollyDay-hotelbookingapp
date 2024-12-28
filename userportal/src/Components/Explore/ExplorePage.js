@@ -1,79 +1,71 @@
-// ExplorePage.js
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Card, Button, Row, Col, Container, Carousel } from 'react-bootstrap';
 import PropertyModal from './PropertyModal';
 import Background from '../UI/Background';
-const ExplorePage = () => {
-  // Sample data for properties
-  const properties = [
-    {
-      id: 1,
-      name: 'Luxury Beach Resort',
-      rating: 4.8,
-      location: 'Maldives',
-      price: 250,
-      images: [
-        'https://via.placeholder.com/800x400?text=Luxury+Beach+Resort+1',
-        'https://via.placeholder.com/800x400?text=Luxury+Beach+Resort+2',
-        'https://via.placeholder.com/800x400?text=Luxury+Beach+Resort+3',
-      ],
-    },
-    {
-      id: 2,
-      name: 'Mountain View Villa',
-      rating: 4.5,
-      location: 'Swiss Alps',
-      price: 320,
-      images: [
-        'https://via.placeholder.com/800x400?text=Mountain+View+Villa+1',
-        'https://via.placeholder.com/800x400?text=Mountain+View+Villa+2',
-        'https://via.placeholder.com/800x400?text=Mountain+View+Villa+3',
-      ],
-    },
-    {
-      id: 3,
-      name: 'City Center Hotel',
-      rating: 4.3,
-      location: 'New York',
-      price: 180,
-      images: [
-        'https://via.placeholder.com/800x400?text=City+Center+Hotel+1',
-        'https://via.placeholder.com/800x400?text=City+Center+Hotel+2',
-        'https://via.placeholder.com/800x400?text=City+Center+Hotel+3',
-      ],
-    },
-    {
-      id: 4,
-      name: 'Waterfront Boathouse',
-      rating: 4.7,
-      location: 'Sydney',
-      price: 220,
-      images: [
-        'https://via.placeholder.com/800x400?text=Waterfront+Boathouse+1',
-        'https://via.placeholder.com/800x400?text=Waterfront+Boathouse+2',
-        'https://via.placeholder.com/800x400?text=Waterfront+Boathouse+3',
-      ],
-    },
-  ];
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import ApiHandler from '../../ApiHandler';
+import { bookingOrderReducerActions } from '../../store/bookingorder';
 
-  const [modalShow, setModalShow] = useState(false); // For controlling modal visibility
-  const [selectedProperty, setSelectedProperty] = useState(null); // To store selected property data
+
+const ExplorePage = () => {
+
+  const [modalShow, setModalShow] = useState(false); 
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const bookingOrders = useSelector(state => state.bookings.bookings);
+   const dispatch = useDispatch();
+  const clientToken = useSelector(state => state.client.clientToken);
+  const properties = useSelector(state => state.propertyClient.properties);
+  const sortProperty = useSelector(state => state.propertyClient.sortProperty);
+  const sortedProperty = properties.filter(list => list.propertyCategory === sortProperty);
+  const navigate = useNavigate()
+  
+
+  useEffect(()=>{
+
+    if(!clientToken){
+     
+        navigate('/client/login')
+    }
+
+
+  },[clientToken])
+
 
   const handleBookNowClick = (property) => {
-    setSelectedProperty(property); // Set the selected property
-    setModalShow(true); // Show the modal
+    setSelectedProperty(property); 
+    setModalShow(true);
   };
 
   const handleCloseModal = () => {
-    setModalShow(false); // Close the modal
-    setSelectedProperty(null); // Clear selected property
+    setModalShow(false);
+    setSelectedProperty(null); 
   };
 
-  const handleBooking = () => {
-    // Logic for booking (could be an API call or state update)
-    alert('Booking Confirmed!');
-    setModalShow(false); // Close the modal after booking
+  const handleBooking = (property,bookingDetails) => {
+     
+    console.log(property,bookingDetails)
+    const optionsObj = {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({property,bookingDetails,clientToken: localStorage.getItem('clientAuthToken')})
+    }
+   ApiHandler('http://localhost:8000/client/newbooking',optionsObj).then(resp =>{
+
+       console.log(resp)
+       dispatch(bookingOrderReducerActions.setBookings([...bookingOrders,resp.booking]))
+
+   }).catch(err =>{
+
+        console.log(err)
+
+   })
+
   };
+
 
   return (
     <Background>
@@ -83,57 +75,69 @@ const ExplorePage = () => {
       </h2>
 
       <Row>
-        {properties.map((property) => (
-          <Col key={property.id} sm={12} md={6} lg={4} className="mb-4">
-            <Card bg="dark" text="light" className="h-100 shadow-lg border-0">
-              {/* Carousel for property images */}
-              <Carousel>
-                {property.images.map((image, index) => (
-                  <Carousel.Item key={index}>
-                    <img className="d-block w-100" src={image} alt={`${property.name} image`} />
-                  </Carousel.Item>
-                ))}
-              </Carousel>
+        {sortedProperty.map((property) => (
+          <Col key={property._id} sm={12} md={6} lg={4} className="mb-4">
+            <Card bg="dark" text="light" className="h-100 shadow-lg border-0 rounded-4">
+  <Carousel>
+    {property.propertyImages.map((image, index) => (
+      <Carousel.Item key={index}>
+        <img
+          className="d-block w-100"
+          style={{ minHeight: '350px', maxHeight: '350px', objectFit: 'cover' }}
+          src={image}
+          alt={`${property.propertyName} image`}
+        />
+      </Carousel.Item>
+    ))}
+  </Carousel>
 
-              <Card.Body>
-                <Card.Title
-                  style={{
-                    fontSize: '1.75rem',
-                    fontWeight: 'bold',
-                    color: '#FFD700', // Gold color for headings
-                    textAlign: 'center',
-                  }}
-                >
-                  {property.name}
-                </Card.Title>
-                <Card.Text
-                  style={{
-                    fontSize: '1.1rem',
-                    color: 'white',
-                    textAlign: 'center',
-                  }}
-                >
-                  <strong>Location:</strong> {property.location}
-                  <br />
-                  <strong>Rating:</strong> {property.rating} ★
-                  <br />
-                  <strong>Price per Night:</strong> ${property.price}
-                </Card.Text>
-                <div className="d-flex justify-content-center">
-                  <Button
-                    variant="primary"
-                    onClick={() => handleBookNowClick(property)} // Open modal with property details
-                  >
-                    Book Now
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
+  <Card.Body>
+    <Card.Title
+      style={{
+        fontSize: '1.75rem',
+        fontWeight: 'bold',
+        color: '#FFD700',
+        textAlign: 'center',
+        textShadow: '1px 1px 5px black',
+      }}
+    >
+      {property.propertyName}
+    </Card.Title>
+    <Card.Text
+      style={{
+        fontSize: '1.1rem',
+        color: 'white',
+        textAlign: 'center',
+      }}
+    >
+      <span style={{ color: '#00FFFF', fontWeight: 'bold' }}>🌍 Location:</span> {property.propertyAddress}
+      <br />
+      <span style={{ color: '#32CD32', fontWeight: 'bold' }}>🏨 Rooms Available:</span> {property.roomsAvailable}
+      <br />
+      <span style={{ color: '#FF4500', fontWeight: 'bold' }}>💲 Price per Night:</span> Rs.{property.ppn}
+    </Card.Text>
+    <div className="d-flex justify-content-center">
+      <Button
+        variant="warning"
+        size="lg"
+        className="rounded-pill fw-bold text-dark"
+        onClick={() => handleBookNowClick(property)}
+        style={{
+          background: 'linear-gradient(to right, #f7c947, #f6a02d)',
+          border: 'none',
+        }}
+      >
+        Book Now
+      </Button>
+    </div>
+  </Card.Body>
+</Card>
+
           </Col>
         ))}
       </Row>
 
-      {/* React Portal Modal */}
+   
       {modalShow && (
         <PropertyModal
           show={modalShow}

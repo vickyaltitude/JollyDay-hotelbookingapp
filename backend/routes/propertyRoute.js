@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Property = require('../models/adminModel/property');
+const Bookings = require('../models/userModel/bookings');
 const uploadImagesToAWS = require('../utils/awsconfig');
 const jwt = require('jsonwebtoken')
 
@@ -67,7 +68,7 @@ router.post('/admin/addproperty',upload.array('images[]', 10),async (req,res)=>{
 router.get('/admin/getproperties',(req,res)=>{
     const adminToken = req.headers.authorization;
     const adminTokenVerified = jwt.verify(adminToken,process.env.JWT_TOKEN_SECRET)
-  
+
 
     Property.find({platformId:adminTokenVerified.userId}).then(resp =>{
         
@@ -115,6 +116,26 @@ router.delete('/admin/deleteproperty/:id',(req,res)=>{
          res.json({msg:'error while deleting the property'})
 
      })
+})
+
+router.get('/admin/getbookings',(req,res)=>{
+
+    const adminToken = req.headers.authorization;
+    const adminTokenVerified = jwt.verify(adminToken,process.env.JWT_TOKEN_SECRET)
+    console.log(adminTokenVerified)
+    Bookings.find({platformId: adminTokenVerified.userId}).populate('userId').populate('propertyId').then(resp =>{
+
+
+         res.json({message:'bookings fetch success',data: resp})
+
+    }).catch(err =>{
+
+          console.log(err)
+
+          res.json({message:'bookings fetch failure'})
+
+    })
+     
 })
 
 module.exports = router

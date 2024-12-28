@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
-import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
-import { NavLink, Link } from 'react-router-dom';
+import { Navbar, Nav, NavDropdown, Container, Button } from 'react-bootstrap';
+import { NavLink, Link,useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { clientReducerActions } from '../../store/userReducer';
+import { propertyClientReducerActions } from '../../store/propertyReducer';
 
 const NavigationBar = () => {
   const [selectedCategory, setSelectedCategory] = useState('Hotels');
-  const [expanded, setExpanded] = useState(false); // Control Navbar Collapse
+  const [expanded, setExpanded] = useState(false); 
+  const clientToken = useSelector(state => state.client.clientToken);
+  const dispatch = useDispatch()
+
 
   const handleSelectedC = (eventKey) => {
+
+
     setSelectedCategory(eventKey);
-    setExpanded(false); // Close the navbar on dropdown selection
+    dispatch(propertyClientReducerActions.setSortProperty(eventKey))
+    localStorage.setItem('sortProperty',eventKey)
+    setExpanded(false); 
   };
+
+ function handleLogout(){
+
+  localStorage.removeItem('clientAuthToken')
+  dispatch(clientReducerActions.setClientToken(null))
+
+ }
 
   return (
     <Navbar
@@ -33,7 +50,7 @@ const NavigationBar = () => {
         {/* Toggle Button */}
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
-          onClick={() => setExpanded(!expanded)} // Toggle the expanded state
+          onClick={() => setExpanded(!expanded)}
         />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
@@ -41,19 +58,19 @@ const NavigationBar = () => {
               as={NavLink}
               to="/client/home"
               className="nav-link px-4"
-              onClick={() => setExpanded(false)} // Collapse menu on click
+              onClick={() => setExpanded(false)}
             >
               Home
             </Nav.Link>
             <NavDropdown
               title={`Explore ${selectedCategory}`}
               id="explore-hotels-dropdown"
-              onSelect={handleSelectedC} // Update selected category
+              onSelect={handleSelectedC} 
             >
               <NavDropdown.Item
                 as={Link}
                 to="/client/explore"
-                eventKey="Hotels"
+                eventKey="hotel"
                 style={{ listStyleType: 'none' }}
               >
                 Hotels
@@ -61,7 +78,7 @@ const NavigationBar = () => {
               <NavDropdown.Item
                 as={Link}
                 to="/client/explore"
-                eventKey="Apartments"
+                eventKey="apartment"
                 style={{ listStyleType: 'none' }}
               >
                 Apartments
@@ -69,7 +86,7 @@ const NavigationBar = () => {
               <NavDropdown.Item
                 as={Link}
                 to="/client/explore"
-                eventKey="Boathouse"
+                eventKey="boathouse"
                 style={{ listStyleType: 'none' }}
               >
                 Boathouses
@@ -77,17 +94,18 @@ const NavigationBar = () => {
               <NavDropdown.Item
                 as={Link}
                 to="/client/explore"
-                eventKey="Villas"
+                eventKey="villa"
                 style={{ listStyleType: 'none' }}
               >
                 Villas
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link
+            {clientToken && <>
+              <Nav.Link
               as={NavLink}
               to="/client/booking-summary"
               className="nav-link px-3"
-              onClick={() => setExpanded(false)} // Collapse menu on click
+              onClick={() => setExpanded(false)} 
             >
               Booking Summary
             </Nav.Link>
@@ -99,6 +117,8 @@ const NavigationBar = () => {
             >
               My Bookings
             </Nav.Link>
+            </>}
+            
             <Nav.Link
               as={NavLink}
               to="/client/aboutus"
@@ -112,17 +132,17 @@ const NavigationBar = () => {
           <Nav className='ms-auto' >
             <Nav.Link
               as={NavLink}
-              to="/client/signup"
+              to="/admin/joinus"
               className="nav-link px-3"
-              onClick={() => setExpanded(false)} // Collapse menu on click
+              onClick={() => setExpanded(false)}
             >
               List Your Property
             </Nav.Link>
-            <Nav.Link
+            {!clientToken && <><Nav.Link
               as={NavLink}
               to="/client/login"
              className="nav-link px-3"
-              onClick={() => setExpanded(false)} // Collapse menu on click
+              onClick={() => setExpanded(false)}
             >
               Login
             </Nav.Link>
@@ -133,7 +153,8 @@ const NavigationBar = () => {
               onClick={() => setExpanded(false)} // Collapse menu on click
             >
               Signup
-            </Nav.Link>
+            </Nav.Link></>}
+            {clientToken && <Button onClick={handleLogout} variant='dark'>Logout</Button>}
           </Nav>
         
          

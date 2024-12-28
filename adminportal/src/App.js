@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import MyNavbar from "./Components/Navbars/NavBar";
 import HomePage from "./Components/Home/Home";
 import Footer from "./Components/Footer/Footer";
+import {Container,Row,Col,Card} from 'react-bootstrap'
 import CreateListing from "./Components/Listings/CreateListing";
 import ViewListings from "./Components/Listings/ViewListings";
 import ManageBookings from "./Components/ManageBookings/ManageBookings";
@@ -13,15 +14,21 @@ import MissingPage from "./Components/MissingPage/MissingPage";
 import SignupPage from "./Components/Authentication/SignupPage";
 import { adminReducerActions } from "./store/adminReducer";
 import { propertyReducerActions } from "./store/propertyReducer";
+import { bookingsReducerActions } from "./store/bookingReducer";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import PropertyDetails from "./Components/Listings/PropertyDetails";
 import ApiHandler from "./ApiHandler";
+import {useSelector} from 'react-redux'
+import Background from "./Components/UI/Background";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 
 function App() {
 
   const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.property.propertyLoading)
 
 
  useEffect(()=>{
@@ -41,6 +48,17 @@ function App() {
       'Authorization' : localStorage.getItem('adminAuthToken')
     }
   }
+
+   ApiHandler('http://localhost:8000/admin/getbookings',optionsObj).then(resp =>{
+    
+    console.log(resp)
+    dispatch(bookingsReducerActions.setBookings(resp.data))
+
+   }).catch(err =>{
+
+       console.log(err)
+
+   })
     
     ApiHandler('http://localhost:8000/admin/getproperties',optionsObj).then(resp=>{
       
@@ -56,6 +74,27 @@ function App() {
    
 
  },[])
+
+
+ if (isLoading) {
+  return (
+    <Background>
+      <Container fluid>
+        <Row className="justify-content-center">
+          <Col md={6} style={{ paddingTop: '50px' }}>
+            <Card style={{ backgroundColor: '#212529', color: 'white', borderRadius: '10px', padding: '30px' }}>
+              <Card.Body>
+                <Skeleton height={30} width="70%" style={{ marginBottom: '20px' }} />
+                <Skeleton height={50} width="100%" count={3} style={{ marginBottom: '20px' }} />
+                <Skeleton height={40} width="40%" />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </Background>
+  );
+}
 
 
   return (

@@ -9,7 +9,8 @@ const path = require("path");
 const dbConnect = require('./utils/dbconnections');
 const newAdmin = require('./routes/adminAuth');
 const property = require('./routes/propertyRoute');
-
+const client = require('./routes/clientAuth');
+const clientProperty = require('./routes/clientPropertyHandle');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json());
@@ -33,6 +34,10 @@ app.get('/admin/home',(req,res)=>{
 app.use(newAdmin);
 
 app.use(property);
+
+app.use(client);
+
+app.use(clientProperty);
 
 dbConnect().then(resp =>{
 

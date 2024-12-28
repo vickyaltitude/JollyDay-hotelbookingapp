@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
+import {NavLink,useNavigate} from 'react-router-dom'
 import Background from '../UI/Background';
+import ApiHandler from '../../ApiHandler';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +11,11 @@ const Signup = () => {
     password: '',
     contact: '',
   });
-
+  const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
+  const [error,setError] = useState(null)
 
-  // Handle input change
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -20,11 +23,44 @@ const Signup = () => {
     });
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    // You can add backend API logic here
+    if(formData.password.trim().length < 6){
+      setSubmitted(false)
+      setError('Password should be more than 6 characters')
+      return
+    }
+    setError(null)
+    const optionsObj = {
+      method: 'POST',
+      headers:{
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(formData)
+    }
+     ApiHandler('http://localhost:8000/client/newuser',optionsObj).then(resp =>{
+         console.log(resp)
+
+         if(resp.message === 'User already exist'){
+
+            setError('User already exist! Please login')
+
+         }else if(resp.message === 'Something went wrong with our database... please try again'){
+            setError('Something went wrong with our database... please try again')
+         }else{
+          setError(null)
+             setSubmitted(true);
+             setTimeout(()=>{
+              navigate('/client/login')
+             },1000)
+         }
+     }).catch(err =>{
+
+        console.log(err)
+        setError('Something went wrong with our database... please try again')
+     })
+ 
+  
   };
 
   return (
@@ -32,20 +68,24 @@ const Signup = () => {
     <Container className="mt-5 pt-5 d-flex justify-content-center">
       <Row className="w-100">
         <Col md={8} lg={6} className="mx-auto">
-          {/* Card Wrapper */}
+        
           <Card bg="dark" text="light" className="shadow-lg border-0">
             <Card.Header className="text-center">
               <h3 style={{ color: 'whitesmoke', fontWeight: 'bold' }}>Sign Up</h3>
             </Card.Header>
             <Card.Body>
-              {/* Submission success message */}
+        
               {submitted && (
                 <Alert variant="success" className="text-center">
-                  Sign-up successful! Welcome to JollyDay 🎉
+                  Sign-up successful! Welcome to JollyDay! Redirecting to login page... 🎉
                 </Alert>
               )}
 
-              {/* Sign-Up Form */}
+              {error &&  <Alert variant="danger" className="text-center">
+                {error}
+                </Alert>}
+
+      
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="username" className="mb-3">
                   <Form.Label>Username</Form.Label>
@@ -102,12 +142,12 @@ const Signup = () => {
             </Card.Body>
 
             <Card.Footer className="text-center">
-              <p className="text-light">
+             
                 Already have an account?{' '}
-                <a href="/login" style={{ color: '#FFD700', textDecoration: 'none' }}>
+                <NavLink  to="/client/login" style={{ color: '#FFD700'}}>
                   Log in here
-                </a>
-              </p>
+                </NavLink>
+           
             </Card.Footer>
           </Card>
         </Col>

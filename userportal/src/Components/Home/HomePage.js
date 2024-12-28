@@ -2,11 +2,14 @@ import React from 'react';
 import { Carousel, Container, Row, Col, Card, Button } from 'react-bootstrap';
 import Background from '../UI/Background';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const HomePage = () => {
+
+  const clientToken = useSelector(state => state.client.clientToken)
   return (
     <Background>
-      {/* Carousel Section */}
+     
       <Carousel>
         <Carousel.Item>
           <img
@@ -185,10 +188,14 @@ const HomePage = () => {
       {/* Call-to-Action Section */}
       <Container className="mt-5 text-center">
         <h2 className="text-light">Ready to Book?</h2>
-        <p className="text-light">
+        {!clientToken && <> <p className="text-light">
           Sign up today and discover the perfect stay for your next vacation.
         </p>
-        <Button as={NavLink} variant="primary" to="/signup">Get Started</Button>
+        <Button as={NavLink} variant="primary" to="/client/signup">Get Started</Button></>}
+        {clientToken &&  <> <p className="text-light">
+         Visit our Explore page to book your stay now
+        </p>
+        <Button as={NavLink} variant="primary" to="/client/explore">Get Started</Button></>}
       </Container>
     </Background>
   );

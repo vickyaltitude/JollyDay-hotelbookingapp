@@ -1,34 +1,41 @@
 import React from 'react';
 import { Card, Button, ListGroup, Row, Col, Container } from 'react-bootstrap';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import Background from '../UI/Background';
+import { useSelector } from 'react-redux';
 
 const BookingSummary = () => {
-  // Sample data for the cart (in a real app, this would come from a state or API)
-  const bookingItems = [
-    {
-      id: 1,
-      name: 'Luxury Beach Resort',
-      location: 'Maldives',
-      pricePerNight: 250,
-      nights: 3,
-      totalPrice: 250 * 3,
-      image: 'https://via.placeholder.com/400x250?text=Luxury+Beach+Resort',
-    },
-    {
-      id: 2,
-      name: 'Mountain View Villa',
-      location: 'Swiss Alps',
-      pricePerNight: 320,
-      nights: 2,
-      totalPrice: 320 * 2,
-      image: 'https://via.placeholder.com/400x250?text=Mountain+View+Villa',
-    },
-  ];
+   
+  const bookingItems = useSelector(state => state.bookings.bookings)
+  const isLoading = useSelector(state => state.propertyClient.isLoading)
+  console.log(bookingItems)
+
 
   const handleRemove = (id) => {
     console.log(`Remove item with ID: ${id}`);
     // Logic for removing the property from the booking (e.g., updating the state)
   };
+
+  if (isLoading) {
+    return (
+      <Background>
+        <Container fluid>
+          <Row className="justify-content-center">
+            <Col md={6} style={{ paddingTop: '50px' }}>
+              <Card style={{ backgroundColor: '#212529', color: 'white', borderRadius: '10px', padding: '30px' }}>
+                <Card.Body>
+                  <Skeleton height={30} width="70%" style={{ marginBottom: '20px' }} />
+                  <Skeleton height={50} width="100%" count={3} style={{ marginBottom: '20px' }} />
+                  <Skeleton height={40} width="40%" />
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </Background>
+    );
+  }
 
   return (
     <Background>
@@ -48,22 +55,27 @@ const BookingSummary = () => {
               <Card.Body>
                 <ListGroup variant="flush">
                   {bookingItems.map((item) => (
-                    <ListGroup.Item key={item.id} className="d-flex justify-content-between align-items-center">
+                    <ListGroup.Item key={item._id} className="d-flex justify-content-between align-items-center">
                       <Row className="w-100">
                         <Col xs={12} md={4}>
-                          <img src={item.image} alt={item.name} className="img-fluid rounded" />
+                          <img src={item.propertyId.propertyImages[0]} alt={item.propertyId.propertyName} style={{minHeight:'250px',maxHeight:'250px'}} className="img-fluid rounded" />
                         </Col>
                         <Col xs={12} md={8} className="d-flex justify-content-between align-items-center">
                           <div>
-                            <h5>{item.name}</h5>
-                            <p className="mb-1"><strong>Location:</strong> {item.location}</p>
-                            <p><strong>Price per Night:</strong> ${item.pricePerNight}</p>
+                            <h5>{item.propertyId.propertyName}</h5>
+                            <p className="mb-1"><strong>Location:</strong> {item.propertyId.propertyAddress}</p>
+                            <p><strong>Price per Night:</strong> ${item.propertyId.ppn}</p>
                           </div>
                           <div>
-                            <h6>Total Price: ${item.totalPrice}</h6>
-                            <Button variant="danger" onClick={() => handleRemove(item.id)}>
-                              Remove
+                            <h6>Total Price: ${item.totalCost}</h6>
+                            {item.bookingStatus === 'Pending Confirmation' ? <Button variant='warning' disabled>Pending Admin Approval</Button> : <>
+                            <Button variant="danger" onClick={() => handleRemove(item._id)}>
+                              Remove Booking
                             </Button>
+                            <Button variant="success">
+                              Pay now to confirm
+                            </Button> </>}
+
                           </div>
                         </Col>
                       </Row>
@@ -71,9 +83,6 @@ const BookingSummary = () => {
                   ))}
                 </ListGroup>
 
-                <div className="d-flex justify-content-end mt-3">
-                  <Button variant="success" href="/checkout">Proceed to Checkout</Button>
-                </div>
               </Card.Body>
             </Card>
           </Col>
