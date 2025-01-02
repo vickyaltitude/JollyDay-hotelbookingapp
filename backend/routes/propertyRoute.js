@@ -138,4 +138,17 @@ router.get('/admin/getbookings',(req,res)=>{
      
 })
 
+router.post('/admin/confirmbooking',(req,res)=>{
+      console.log(req.body);
+      Bookings.findByIdAndUpdate({_id: req.body.id},{$set:{bookingStatus:req.body.bookingStatus}}).then(resp =>{
+
+          res.status(200).json({message:'Booking status upated successfully'})
+
+      }).catch(err =>{
+
+         console.log(err)
+
+      })
+})
+
 module.exports = router

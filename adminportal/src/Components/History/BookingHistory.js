@@ -1,50 +1,42 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button, Table } from 'react-bootstrap';
 import Background from '../UI/Background';
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import {useSelector} from 'react-redux';
+ 
 const BookingHistory = () => {
-  const bookings = [
-    {
-      id: 1,
-      propertyName: 'Oceanfront Villa',
-      customerName: 'John Doe',
-      status: 'Confirmed and Paid',
-      bookingDate: '2024-11-15',
-      totalAmount: 600,
-    },
-    {
-      id: 2,
-      propertyName: 'City Center Apartment',
-      customerName: 'Jane Smith',
-      status: 'Waiting for Payment',
-      bookingDate: '2024-11-20',
-      totalAmount: 300,
-    },
-    {
-      id: 3,
-      propertyName: 'Luxury Boathouse',
-      customerName: 'Sarah Johnson',
-      status: 'Confirmed but Rejected by Customer',
-      bookingDate: '2024-11-22',
-      totalAmount: 500,
-    },
-    {
-      id: 4,
-      propertyName: '5-Star Hotel Suite',
-      customerName: 'Michael Brown',
-      status: 'Rejected',
-      bookingDate: '2024-11-25',
-      totalAmount: 700,
-    },
-    {
-      id: 5,
-      propertyName: 'Mountain Retreat',
-      customerName: 'Emily Davis',
-      status: 'Confirmed and Paid',
-      bookingDate: '2024-11-30',
-      totalAmount: 850,
-    },
-  ];
+
+  const bookings = useSelector(state => state.bookings.bookings);
+  const filterByBookings = bookings.filter(
+    (list) =>
+      list.bookingStatus === "Cancelled by client" ||
+      list.bookingStatus === "Confirmed booking" ||
+      list.bookingStatus === "Rejected by admin" ||
+      list.bookingStatus === "Confirmed by admin" 
+  );
+ 
+  console.log(filterByBookings)
+
+  if (!bookings) {
+    return (
+      <Background>
+        <Container fluid>
+          <Row className="justify-content-center">
+            <Col md={6} style={{ paddingTop: '50px' }}>
+              <Card style={{ backgroundColor: '#212529', color: 'white', borderRadius: '10px', padding: '30px' }}>
+                <Card.Body>
+                  <Skeleton height={30} width="70%" style={{ marginBottom: '20px' }} />
+                  <Skeleton height={50} width="100%" count={3} style={{ marginBottom: '20px' }} />
+                  <Skeleton height={40} width="40%" />
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </Background>
+    );
+  }
 
   return (
     <Background>
@@ -67,28 +59,35 @@ const BookingHistory = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bookings.map((booking) => (
-                      <tr key={booking.id}>
-                        <td>{booking.propertyName}</td>
-                        <td>{booking.customerName}</td>
-                        <td>{booking.bookingDate}</td>
+                    {filterByBookings.map((booking) => (
+                      <tr key={booking._id}>
+                        <td>{booking.propertyId.propertyName}</td>
+                        <td>{booking.userId.userName}</td>
+                        <td> From{" "}
+                        {`${new Date(
+                          booking.startingDate
+                        ).toLocaleDateString()}`}{" "}
+                        to{" "}
+                        {`${new Date(booking.endingDate).toLocaleDateString()}`}</td>
                         <td>
                         
                           <span
                             className={`badge ${
-                              booking.status === 'Confirmed and Paid'
+                              booking.bookingStatus === 'Confirmed booking'
                                 ? 'bg-success'
-                                : booking.status === 'Waiting for Payment'
+                                : booking.bookingStatus === 'Rejected by admin'
+                                ? 'bg-danger'
+                                : booking.bookingStatus === 'Confirmed by admin'
                                 ? 'bg-warning'
-                                : booking.status === 'Confirmed but Rejected by Customer'
+                                : booking.bookingStatus === 'Cancelled by client'
                                 ? 'bg-danger'
                                 : 'bg-secondary'
                             }`}
                           >
-                            {booking.status}
+                            {booking.bookingStatus}
                           </span>
                         </td>
-                        <td>${booking.totalAmount}</td>
+                        <td>${booking.totalCost}</td>
                       </tr>
                     ))}
                   </tbody>

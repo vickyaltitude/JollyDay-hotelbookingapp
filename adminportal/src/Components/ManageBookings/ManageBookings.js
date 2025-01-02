@@ -4,20 +4,37 @@ import Background from '../UI/Background';
 import {useSelector} from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { bookingsReducerActions } from '../../store/bookingReducer';
+import {useDispatch} from 'react-redux';
+import ApiHandler from '../../ApiHandler';
 
 const ManageBookings = () => {
 
 
-  const bookings = useSelector(state => state.bookings.bookings)
-
+  const bookings = useSelector(state => state.bookings.bookings);
+  const filterByStatus = bookings.filter(booking =>  booking.bookingStatus === 'Pending Confirmation')
+  const dispatch = useDispatch();
   
   const [feedback, setFeedback] = useState(null);
 
  
   const handleBookingAction = (id, action) => {
+
     const updatedBookings = bookings.map((booking) =>
-      booking.id === id ? { ...booking, status: action } : booking
+
+      booking._id === id ? { ...booking, bookingStatus: action === 'Confirm' ? 'Confirmed by admin' : 'Rejected by admin' } : booking
+
     );
+
+    dispatch(bookingsReducerActions.setBookings(updatedBookings))
+
+     ApiHandler('http://localhost:8000/admin/confirmbooking',{
+       method:'POST',
+       headers:{
+        'Content-Type' : 'application/json'
+       },
+       body: JSON.stringify({id,bookingStatus: action === 'Confirm' ? 'Confirmed by admin' : 'Rejected by admin' })
+     })
 
     setFeedback(`Booking ${action}ed successfully!`);
   };
@@ -54,7 +71,7 @@ const ManageBookings = () => {
           {feedback && <Alert variant="success">{feedback}</Alert>}
 
           <Row>
-            {bookings.map((booking) => (
+            {filterByStatus.map((booking) => (
               <Col md={4} key={booking._id} className="mb-4">
                 <Card className="shadow-lg" style={{ borderRadius: '10px' }}>
                   <Card.Body style={{ backgroundColor: '#343a40', color: 'white' }}>
@@ -70,34 +87,29 @@ const ManageBookings = () => {
                     </Card.Text>
 
                     <div className="d-flex justify-content-between">
-                      <Button
+                      {booking.bookingStatus === 'Confirmed by admin' &&  <Button variant='warning' disabled>
+                         Pending Payment
+                      </Button>}
+
+                      {booking.bookingStatus === 'Pending Confirmation'  && <>   <Button
                         variant="success"
-                        //onClick={() => handleBookingAction(booking.id, 'Confirm')}
-                        //disabled={booking.status === 'Confirmed'}
+                        onClick={() => handleBookingAction(booking._id, 'Confirm')}
+          
                       >
                         Confirm
                       </Button>
                       <Button
                         variant="danger"
-                       // onClick={() => handleBookingAction(booking.id, 'Reject')}
-                       // disabled={booking.status === 'Rejected'}
+                        onClick={() => handleBookingAction(booking._id, 'Reject')}
+                    
                       >
                         Reject
-                      </Button>
+                      </Button></>}
+                  
+                    
                     </div>
 
-                    {/* {booking.status && (
-                      <div className="mt-3">
-                        <strong>Status: </strong>
-                        <span
-                          style={{
-                            color: booking.status === 'Confirmed' ? 'green' : 'red',
-                          }}
-                        >
-                          {booking.status}
-                        </span>
-                      </div>
-                    )} */}
+                  
                   </Card.Body>
                 </Card>
               </Col>
