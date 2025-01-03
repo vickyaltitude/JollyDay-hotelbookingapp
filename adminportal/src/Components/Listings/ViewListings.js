@@ -19,7 +19,7 @@ const ViewListings = () => {
      if (adminToken !== null) {
        setIsTokenChecked(true);
      } else if (isTokenChecked) {
-       navigate('/admin/login');
+       navigate('/backend/login');
      }
    }, [adminToken, navigate, isTokenChecked]);
  

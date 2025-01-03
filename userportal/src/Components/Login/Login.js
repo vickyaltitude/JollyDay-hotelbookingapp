@@ -51,7 +51,7 @@ const Login = () => {
           dispatch(clientReducerActions.setClientToken(resp.clientAuthToken))
           localStorage.setItem('clientAuthToken',resp.clientAuthToken)
           setTimeout(()=>{
-            navigate('/client/home')
+            navigate('/user/home')
           },1500)
          
         }
@@ -122,13 +122,13 @@ const Login = () => {
             <Card.Footer className="text-center">
               <p className="text-light">
                 Don't have an account yet?{' '}
-                <NavLink to="/client/signup" style={{ color: '#FFD700'}}>
+                <NavLink to="/user/signup" style={{ color: '#FFD700'}}>
                   Sign up here
                 </NavLink>
               </p>
               <p className="text-light">
                 Forgot your password?{' '}
-                <NavLink to="/client/forgot-password" style={{ color: '#FFD700'}}>
+                <NavLink to="/user/forgot-password" style={{ color: '#FFD700'}}>
                   Reset it here
                 </NavLink>
               </p>

@@ -79,7 +79,7 @@ const SignupPage = () => {
             alert('User successfully created! Redirecting to login page')
            
              setTimeout(()=>{
-                  navigate('/admin/login')
+                  navigate('/backend/login')
              })
  
         }else if(resp.message === 'Something went wrong with our database... please try again'){

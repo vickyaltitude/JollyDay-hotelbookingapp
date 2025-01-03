@@ -11,7 +11,7 @@ const MissingPage = () => {
           <h1 className="display-4">404</h1>
           <h2>Oops! Page Not Found</h2>
           <p>The page you are looking for might have been moved or doesn't exist.</p>
-          <Link to="/">
+          <Link to="/backend/home">
             <Button variant="primary" size="lg">Go to Home</Button>
           </Link>
         </Col>

@@ -51,7 +51,7 @@ const Signup = () => {
           setError(null)
              setSubmitted(true);
              setTimeout(()=>{
-              navigate('/client/login')
+              navigate('/user/login')
              },1000)
          }
      }).catch(err =>{
@@ -144,7 +144,7 @@ const Signup = () => {
             <Card.Footer className="text-center">
              
                 Already have an account?{' '}
-                <NavLink  to="/client/login" style={{ color: '#FFD700'}}>
+                <NavLink  to="/user/login" style={{ color: '#FFD700'}}>
                   Log in here
                 </NavLink>
            

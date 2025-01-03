@@ -32,6 +32,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+
     ApiHandler("http://localhost:8000/client/getbookingorders")
       .then((resp) => {
         console.log(resp);
@@ -98,13 +99,13 @@ function App() {
     <div>
       <NavigationBar />
       <Routes>
-        <Route path="/client/home" element={<HomePage />} />
-        <Route path="/client/explore" element={<ExplorePage />} />
-        <Route path="/client/booking-summary" element={<BookingSummary />} />
-        <Route path="/client/my-bookings" element={<MyBookingsPage />} />
-        <Route path="/client/aboutus" element={<AboutUsPage />} />
-        <Route path="/client/signup" element={<Signup />} />
-        <Route path="/client/login" element={<Login />} />
+        <Route path="/user/home" element={<HomePage />} />
+        <Route path="/user/explore" element={<ExplorePage />} />
+        <Route path="/user/booking-summary" element={<BookingSummary />} />
+        <Route path="/user/my-bookings" element={<MyBookingsPage />} />
+        <Route path="/user/aboutus" element={<AboutUsPage />} />
+        <Route path="/user/signup" element={<Signup />} />
+        <Route path="/user/login" element={<Login />} />
       </Routes>
       <Footer />
     </div>

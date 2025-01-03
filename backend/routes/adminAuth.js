@@ -153,10 +153,6 @@ router.post('/admin/updateadminprofile',upload.single('profilePic'),(req,res)=>{
             })
 
         }
-    
-    
-       
-   
 
 })
 

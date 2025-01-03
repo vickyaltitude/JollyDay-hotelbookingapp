@@ -102,16 +102,16 @@ function App() {
        <MyNavbar />
      
        <Routes>
-        <Route path='/admin/home' element={  <HomePage />} />
-        <Route path='/admin/create-listing' element={<CreateListing /> } />
-        <Route path='/admin/view-listings' element={<ViewListings /> } />
-        <Route path='/admin/manage-bookings' element={<ManageBookings /> } />
-        <Route path='/admin/profile' element={<AdminProfile /> } />
-        <Route path='/admin/booking-history' element={<BookingHistory /> } />
-        <Route path='/admin/login' element={<LoginPage /> } />
-        <Route path='/admin/joinus' element={<JoinUsPage /> } />
-        <Route path='/admin/signup' element={<SignupPage /> } />
-        <Route path='/admin/propertydetails/:id' element={<PropertyDetails /> }/>
+        <Route path='/backend/home' element={  <HomePage />} />
+        <Route path='/backend/create-listing' element={<CreateListing /> } />
+        <Route path='/backend/view-listings' element={<ViewListings /> } />
+        <Route path='/backend/manage-bookings' element={<ManageBookings /> } />
+        <Route path='/backend/profile' element={<AdminProfile /> } />
+        <Route path='/backend/booking-history' element={<BookingHistory /> } />
+        <Route path='/backend/login' element={<LoginPage /> } />
+        <Route path='/backend/joinus' element={<JoinUsPage /> } />
+        <Route path='/backend/signup' element={<SignupPage /> } />
+        <Route path='/backend/propertydetails/:id' element={<PropertyDetails /> }/>
         <Route path="*" element={<MissingPage /> }/>
        </Routes>
        <Footer />

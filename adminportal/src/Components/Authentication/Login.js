@@ -39,7 +39,7 @@ const LoginPage = () => {
             localStorage.setItem('adminDetails',JSON.stringify(resp.userDetails))
             dispatch(adminReducerActions.setAdminAuthToken(resp.adminAuthToken))
             dispatch(adminReducerActions.setAdminDetails(resp.userDetails))
-            navigate('/admin/home')
+            navigate('/backend/home')
 
           }else{
 

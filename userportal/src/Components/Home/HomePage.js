@@ -191,11 +191,11 @@ const HomePage = () => {
         {!clientToken && <> <p className="text-light">
           Sign up today and discover the perfect stay for your next vacation.
         </p>
-        <Button as={NavLink} variant="primary" to="/client/signup">Get Started</Button></>}
+        <Button as={NavLink} variant="primary" to="/user/signup">Get Started</Button></>}
         {clientToken &&  <> <p className="text-light">
          Visit our Explore page to book your stay now
         </p>
-        <Button as={NavLink} variant="primary" to="/client/explore">Get Started</Button></>}
+        <Button as={NavLink} variant="primary" to="/user/explore">Get Started</Button></>}
       </Container>
     </Background>
   );

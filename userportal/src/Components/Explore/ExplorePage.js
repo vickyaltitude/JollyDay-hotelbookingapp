@@ -26,7 +26,7 @@ const ExplorePage = () => {
 
     if(!clientToken){
      
-        navigate('/client/login')
+        navigate('/user/login')
     }
 
 

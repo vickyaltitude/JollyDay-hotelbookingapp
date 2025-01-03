@@ -23,11 +23,11 @@ app.use(cors({
 app.use(express.static(path.join(__dirname,'../' ,'adminportal/build')));
 app.use(express.static(path.join(__dirname,'../' , 'userportal/build')));
 
-app.get('/client/home',(req,res)=>{
+app.get('/user/*',(req,res)=>{
     res.sendFile(path.join(__dirname, "../" , "userportal/build", "index.html"));
 })
 
-app.get('/admin/home',(req,res)=>{
+app.get('/backend/*',(req,res)=>{
     res.sendFile(path.join(__dirname, "../" , "adminportal/build", "index.html"));
 })
 

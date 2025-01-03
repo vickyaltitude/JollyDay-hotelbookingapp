@@ -61,7 +61,7 @@ const PropertyDetails = () => {
         console.log(resp)
         const newProperties = property.filter(list => list._id !== id)
         dispatch(propertyReducerActions.setProperties(newProperties))
-        navigate('/admin/view-listings'); 
+        navigate('/backend/view-listings'); 
     }).catch(err =>{
         console.log(err)
     })

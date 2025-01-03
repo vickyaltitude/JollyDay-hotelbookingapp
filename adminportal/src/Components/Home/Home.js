@@ -69,7 +69,7 @@ const HomePage = () => {
                     Whether you have a cozy apartment in the city or a luxurious villa by the beach, we provide the tools you need to showcase your property effectively.
                 </p>
                 <div className="text-center">
-                    <NavLink to="/" className="btn btn-primary btn-lg">Join Us & List Your Properties Now</NavLink>
+                    <NavLink to="/admin/signup" className="btn btn-primary btn-lg">Join Us & List Your Properties Now</NavLink>
                 </div>
          
              
